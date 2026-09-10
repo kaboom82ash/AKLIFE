@@ -1,0 +1,11 @@
+{
+  "name": "aklife-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AK Life & Legacy Planning — static marketing site",
+  "type": "module",
+  "scripts": {
+    "build": "node build/build.mjs",
+    "serve": "node build/build.mjs && python3 -m http.server 8080"
+  }
+}
