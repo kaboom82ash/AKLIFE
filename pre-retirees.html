@@ -99,44 +99,160 @@
         People roughly 55 to 70 with substantial retirement assets — a long corporate career, a professional practice, or a recent business sale — who are shifting from building wealth to protecting income, managing taxes, and deciding what passes to the next generation.
       </div>
     <div class="form-card" id="book">
-      <h3>Get your free plan check</h3>
-      <p class="note">Tell us a little about your situation. We'll follow up to schedule your 20-minute call — usually within one business day.</p>
-      <form id="leadForm">
+      <h3>Retirement tax &amp; legacy check</h3>
+      <p class="note">Six questions. They tell us whether the tax, the care risk, or the legacy piece is the thing worth your twenty minutes.</p>
+      <ol class="step-dots" aria-hidden="true">
+        <li class="on"></li>
+        <li></li>
+      </ol>
+      <form id="leadForm" method="POST" action="" novalidate>
         <input type="hidden" name="audience" value="Pre-Retirees &amp; Recent Exits">
-        <div class="field">
-          <label for="name">Full name</label>
-          <input type="text" id="name" name="name" required placeholder="Jordan Smith" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="jordan@email.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" required placeholder="(555) 555-5555" autocomplete="tel">
-        </div>
-        <div class="field">
-          <label for="state">State</label>
-          <input type="text" id="state" name="state" required placeholder="Georgia" autocomplete="address-level1">
-        </div>
-        <div class="field">
-          <label for="topic">What's mainly on your mind?</label>
-          <select id="topic" name="topic">
-            <option>Protecting my family's income</option>
-            <option>Retirement &amp; cash-value strategies</option>
-            <option>Business or estate planning</option>
-            <option>Not sure yet — I'd like guidance</option>
+        <input type="hidden" name="page_slug" value="pre-retirees">
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="referrer" value="">
+        <p class="hp" aria-hidden="true"><label>Leave this empty<input name="company_website" tabindex="-1" autocomplete="off"></label></p>
+      <fieldset class="form-step" data-step="0">
+        <legend class="step-legend">Where you stand</legend>
+        <p class="step-note">Ranges are fine — nothing here is a commitment and none of it is underwriting.</p>
+        <div class="field-grid">
+        <div class="field half">
+          <label for="f_age_band">Age <span class="req" aria-hidden="true">*</span></label>
+          <select id="f_age_band" name="age_band" required>
+            <option value="">Select…</option>
+            <option>Under 50</option>
+            <option>50 – 54</option>
+            <option>55 – 59</option>
+            <option>60 – 64</option>
+            <option>65 – 70</option>
+            <option>Over 70</option>
           </select>
         </div>
-        <button type="submit" class="submit-btn">Request my free consultation</button>
+        <div class="field half">
+          <label for="f_status">Where are you? <span class="req" aria-hidden="true">*</span></label>
+          <select id="f_status" name="status" required>
+            <option value="">Select…</option>
+            <option>Working, more than 5 years out</option>
+            <option>Working, within 5 years of retiring</option>
+            <option>Recently retired</option>
+            <option>Recently sold a business</option>
+            <option>Already retired some years</option>
+          </select>
+        </div>
+        <div class="field half">
+          <label for="f_pretax_balance">Approximate pre-tax retirement balance</label>
+          <select id="f_pretax_balance" name="pretax_balance">
+            <option value="">Select…</option>
+            <option>Under $500,000</option>
+            <option>$500,000 – $1M</option>
+            <option>$1M – $3M</option>
+            <option>Over $3M</option>
+            <option>Prefer not to say</option>
+          </select>
+        </div>
+        <div class="field half">
+          <label for="f_pension">Do you have a pension election to make?</label>
+          <select id="f_pension" name="pension">
+            <option value="">Select…</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field half">
+          <label for="f_ltc">Is long-term care planned for? <span class="req" aria-hidden="true">*</span></label>
+          <select id="f_ltc" name="ltc" required>
+            <option value="">Select…</option>
+            <option>Yes, we have coverage</option>
+            <option>No</option>
+            <option>We intend to self-fund</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field half">
+          <label for="f_term_expiring">Any term policy expiring soon?</label>
+          <select id="f_term_expiring" name="term_expiring">
+            <option value="">Select…</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Not sure</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f_priority">What concerns you most?</label>
+          <select id="f_priority" name="priority">
+            <option value="">Select…</option>
+            <option>Taxes on a large pre-tax balance</option>
+            <option>What my children will owe on an inherited IRA</option>
+            <option>Paying for long-term care</option>
+            <option>The surviving spouse being worse off</option>
+            <option>Leaving a legacy efficiently</option>
+            <option>Not sure — I want an honest review</option>
+          </select>
+        </div>
+        </div>
+
+        <div class="form-nav">
+          <button type="button" class="submit-btn" data-next>Continue &rarr;</button>
+        </div>
+      </fieldset>
+      <fieldset class="form-step" data-step="1" hidden>
+        <legend class="step-legend">How should we reach you?</legend>
+        <p class="step-note">We usually follow up within one business day to find a time.</p>
+        <div class="field-grid">
+        <div class="field">
+          <label for="f_name">Full name <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="f_name" name="name" required placeholder="Jordan Smith" autocomplete="name">
+        </div>
+        <div class="field half">
+          <label for="f_email">Email <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="f_email" name="email" required placeholder="jordan@email.com" autocomplete="email">
+        </div>
+        <div class="field half">
+          <label for="f_phone">Phone <span class="req" aria-hidden="true">*</span></label>
+          <input type="tel" id="f_phone" name="phone" required placeholder="(555) 555-5555" autocomplete="tel">
+        </div>
+        <div class="field half">
+          <label for="f_state">State <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="f_state" name="state" required placeholder="Georgia" autocomplete="address-level1">
+        </div>
+        <div class="field half">
+          <label for="f_best_time">Best time to call</label>
+          <select id="f_best_time" name="best_time">
+            <option value="">Select…</option>
+            <option>Morning</option>
+            <option>Midday</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+            <option>Any time</option>
+          </select>
+        </div>
+        </div>
+        <div class="consent">
+          <input type="checkbox" id="f_consent" name="consent" required value="yes">
+          <label for="f_consent">I agree to be contacted by [Advisor name] by phone, text or email about
+          insurance products, including at the number above, which may involve automated technology. Consent is not a
+          condition of purchase and message rates may apply. I can opt out at any time.</label>
+        </div>
+
+        <div class="form-nav">
+          <button type="button" class="btn-back" data-back>&larr; Back</button>
+          <button type="submit" class="submit-btn">Request my retirement check</button>
+        </div>
+      </fieldset>
       </form>
-      <div class="success-msg" id="successMsg">
-        Thanks &mdash; that's in. We'll reach out shortly to find a time that works.
+      <div class="success-msg" id="successMsg" role="status">
+        <strong>Thanks &mdash; that's in.</strong>
+        We'll be in touch within one business day to find a time. Nothing is scheduled and nothing is owed until you say so.
         <div style="margin-top:14px;">
-          <a href="strategies.html" style="display:inline-block;background:var(--forest);color:var(--white);padding:11px 18px;border-radius:3px;text-decoration:none;font-size:14px;font-weight:700;">Access your strategy guide &rarr;</a>
+          <a class="success-cta" href="strategies.html">Read the strategy guide while you wait &rarr;</a>
         </div>
       </div>
-      <p class="form-fine">No spam, ever. Your information is only used to prepare for your consultation.</p>
+      <div class="error-msg" id="errorMsg" role="alert">
+        That didn't go through. Please email <a href="mailto:[your@email.com]">[your@email.com]</a> or try again in a moment.
+      </div>
+      <p class="form-fine">No spam, ever. Your information is used only to prepare for your consultation and is never sold.</p>
     </div>
     </div>
   </div>

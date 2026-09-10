@@ -2,6 +2,8 @@
 // Everything that appears on every page lives here so it stays consistent.
 
 import { cohorts } from './data-cohorts.mjs';
+import { formFor } from './data-forms.mjs';
+import { FORM_ENDPOINT } from './config.mjs';
 
 export const BRAND = 'AK Life &amp; Legacy Planning';
 
@@ -10,6 +12,8 @@ export const ADVISOR = {
   name: '[Advisor name]',
   states: '[list states]',
   npn: '[xxxxxxx]',
+  // Shown if a form submission fails. Fill this in before publishing.
+  email: '[your@email.com]',
 };
 
 export const esc = (s) =>
@@ -97,44 +101,104 @@ ${mobileCohorts}
 </header>`;
 }
 
-export function leadForm({ id = 'book', heading, note, topics, hiddenContext = '' }) {
-  const opts = topics.map((t) => `            <option>${esc(t)}</option>`).join('\n');
-  return `    <div class="form-card" id="${id}">
-      <h3>${esc(heading)}</h3>
-      <p class="note">${esc(note)}</p>
-      <form id="leadForm">
-${hiddenContext ? `        <input type="hidden" name="audience" value="${esc(hiddenContext)}">\n` : ''}        <div class="field">
-          <label for="name">Full name</label>
-          <input type="text" id="name" name="name" required placeholder="Jordan Smith" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="jordan@email.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" required placeholder="(555) 555-5555" autocomplete="tel">
-        </div>
-        <div class="field">
-          <label for="state">State</label>
-          <input type="text" id="state" name="state" required placeholder="Georgia" autocomplete="address-level1">
-        </div>
-        <div class="field">
-          <label for="topic">What's mainly on your mind?</label>
-          <select id="topic" name="topic">
+function renderField(f, stepIdx) {
+  const id = `f_${f.name}`;
+  const req = f.required ? ' required' : '';
+  const cls = f.half ? 'field half' : 'field';
+  const reqMark = f.required ? ' <span class="req" aria-hidden="true">*</span>' : '';
+
+  if (f.type === 'select') {
+    const opts = [`            <option value="">Select…</option>`]
+      .concat(f.options.map((o) => `            <option>${esc(o)}</option>`))
+      .join('\n');
+    return `        <div class="${cls}">
+          <label for="${id}">${esc(f.label)}${reqMark}</label>
+          <select id="${id}" name="${f.name}"${req}>
 ${opts}
           </select>
+        </div>`;
+  }
+
+  const t = f.inputType || 'text';
+  const ac = f.autocomplete ? ` autocomplete="${f.autocomplete}"` : '';
+  const ph = f.placeholder ? ` placeholder="${esc(f.placeholder)}"` : '';
+  return `        <div class="${cls}">
+          <label for="${id}">${esc(f.label)}${reqMark}</label>
+          <input type="${t}" id="${id}" name="${f.name}"${req}${ph}${ac}>
+        </div>`;
+}
+
+export function leadForm({ id = 'book', slug = '', audienceLabel = '' } = {}) {
+  const def = formFor(slug);
+  const multi = def.steps.length > 1;
+
+  const steps = def.steps
+    .map((step, i) => {
+      const fields = step.fields.map((f) => renderField(f, i)).join('\n');
+      const isLast = i === def.steps.length - 1;
+      const nav = isLast
+        ? `        <div class="form-nav">
+${multi ? `          <button type="button" class="btn-back" data-back>&larr; Back</button>\n` : ''}          <button type="submit" class="submit-btn">${esc(def.cta)}</button>
+        </div>`
+        : `        <div class="form-nav">
+          <button type="button" class="submit-btn" data-next>Continue &rarr;</button>
+        </div>`;
+
+      return `      <fieldset class="form-step" data-step="${i}"${i > 0 ? ' hidden' : ''}>
+        <legend class="step-legend">${esc(step.title)}</legend>
+${step.note ? `        <p class="step-note">${esc(step.note)}</p>\n` : ''}        <div class="field-grid">
+${fields}
         </div>
-        <button type="submit" class="submit-btn">Request my free consultation</button>
+${isLast ? consentBlock() : ''}
+${nav}
+      </fieldset>`;
+    })
+    .join('\n');
+
+  const dots = multi
+    ? `      <ol class="step-dots" aria-hidden="true">
+${def.steps.map((s2, i) => `        <li${i === 0 ? ' class="on"' : ''}></li>`).join('\n')}
+      </ol>`
+    : '';
+
+  return `    <div class="form-card" id="${id}">
+      <h3>${esc(def.heading)}</h3>
+      <p class="note">${esc(def.note)}</p>
+${dots}
+      <form id="leadForm" method="POST" action="${FORM_ENDPOINT || ''}" novalidate>
+        <input type="hidden" name="audience" value="${esc(audienceLabel || 'General')}">
+        <input type="hidden" name="page_slug" value="${esc(slug || 'index')}">
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="referrer" value="">
+        <p class="hp" aria-hidden="true"><label>Leave this empty<input name="company_website" tabindex="-1" autocomplete="off"></label></p>
+${steps}
       </form>
-      <div class="success-msg" id="successMsg">
-        Thanks &mdash; that's in. We'll reach out shortly to find a time that works.
+      <div class="success-msg" id="successMsg" role="status">
+        <strong>Thanks &mdash; that's in.</strong>
+        We'll be in touch within one business day to find a time. Nothing is scheduled and nothing is owed until you say so.
         <div style="margin-top:14px;">
-          <a href="strategies.html" style="display:inline-block;background:var(--forest);color:var(--white);padding:11px 18px;border-radius:3px;text-decoration:none;font-size:14px;font-weight:700;">Access your strategy guide &rarr;</a>
+          <a class="success-cta" href="strategies.html">Read the strategy guide while you wait &rarr;</a>
         </div>
       </div>
-      <p class="form-fine">No spam, ever. Your information is only used to prepare for your consultation.</p>
+      <div class="error-msg" id="errorMsg" role="alert">
+        That didn't go through. Please email <a href="mailto:${ADVISOR.email}">${ADVISOR.email}</a> or try again in a moment.
+      </div>
+      <p class="form-fine">No spam, ever. Your information is used only to prepare for your consultation and is never sold.</p>
     </div>`;
+}
+
+// TCPA-style express consent. THIS WORDING IS A STARTING DRAFT — have your
+// compliance team or attorney finalise it before you run paid traffic.
+function consentBlock() {
+  return `        <div class="consent">
+          <input type="checkbox" id="f_consent" name="consent" required value="yes">
+          <label for="f_consent">I agree to be contacted by ${ADVISOR.name} by phone, text or email about
+          insurance products, including at the number above, which may involve automated technology. Consent is not a
+          condition of purchase and message rates may apply. I can opt out at any time.</label>
+        </div>
+`;
 }
 
 export function footer({ extraDisclosure = '', ctaHref = '#book' } = {}) {

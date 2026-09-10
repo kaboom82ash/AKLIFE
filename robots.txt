@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Internal planning document — not for indexing
+Disallow: /market-plan.html
+
 Sitemap: https://www.example.com/sitemap.xml

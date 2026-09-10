@@ -1,0 +1,968 @@
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Atlanta Market Map</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --ground:#F5F6F4;
+    --surface:#FFFFFF;
+    --surface-sunk:#EDF0EE;
+    --ink:#16211F;
+    --ink-2:#54645F;
+    --ink-3:#7B8A85;
+    --rule:#DCE3E0;
+    --rule-strong:#C2CCC8;
+    --accent:#2F4B43;
+    --accent-soft:#E4EDE9;
+    --signal:#96631A;
+    --signal-soft:#F6EEDF;
+    --t1:#24413A;
+    --t2:#52786C;
+    --t3:#8FA8A0;
+    --bar-track:#E4EAE7;
+    --shadow:0 1px 2px rgba(22,33,31,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#121614;
+      --surface:#1A201D;
+      --surface-sunk:#151A18;
+      --ink:#E7EDEA;
+      --ink-2:#9EAEA9;
+      --ink-3:#788782;
+      --rule:#2A322E;
+      --rule-strong:#3C4641;
+      --accent:#8CC0AF;
+      --accent-soft:#1F2E29;
+      --signal:#D9AC5E;
+      --signal-soft:#2A2318;
+      --t1:#A8D0C1;
+      --t2:#6F978A;
+      --t3:#4C635C;
+      --bar-track:#242C29;
+      --shadow:0 1px 2px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#121614;
+    --surface:#1A201D;
+    --surface-sunk:#151A18;
+    --ink:#E7EDEA;
+    --ink-2:#9EAEA9;
+    --ink-3:#788782;
+    --rule:#2A322E;
+    --rule-strong:#3C4641;
+    --accent:#8CC0AF;
+    --accent-soft:#1F2E29;
+    --signal:#D9AC5E;
+    --signal-soft:#2A2318;
+    --t1:#A8D0C1;
+    --t2:#6F978A;
+    --t3:#4C635C;
+    --bar-track:#242C29;
+    --shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:'Source Serif 4',Georgia,serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{max-width:1080px;margin:0 auto;padding-block:0 72px;padding-left:24px;padding-right:24px;}
+  .col{max-width:68ch;}
+  h1,h2,h3,h4{font-family:'Archivo',system-ui,sans-serif;margin:0;text-wrap:balance;letter-spacing:-0.01em;}
+  h1{font-size:clamp(30px,4.6vw,46px);font-weight:700;line-height:1.05;}
+  h2{font-size:clamp(23px,2.8vw,30px);font-weight:600;line-height:1.15;}
+  h3{font-size:19px;font-weight:600;line-height:1.25;}
+  h4{font-size:14px;font-weight:600;}
+  p{margin:0;}
+  a{color:inherit;}
+  strong{font-weight:600;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-3);
+  }
+  .stack{display:flex;flex-direction:column;}
+  .g8{gap:8px;} .g12{gap:12px;} .g16{gap:16px;} .g24{gap:24px;} .g32{gap:32px;} .g48{gap:48px;}
+
+  /* masthead */
+  header.mast{border-bottom:2px solid var(--ink);padding-block:44px 20px;margin-bottom:0;}
+  .mast-meta{
+    display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:18px;
+    font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-3);
+  }
+  .lede{font-size:19px;color:var(--ink-2);margin-top:18px;max-width:62ch;}
+
+  section{padding-block:52px;border-bottom:1px solid var(--rule);}
+  section:last-of-type{border-bottom:none;}
+  .sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:28px;max-width:70ch;}
+  .sec-head p{color:var(--ink-2);}
+
+  /* base figures */
+  .figs{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));
+    gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;
+  }
+  .fig{background:var(--surface);padding:18px 18px 16px;display:flex;flex-direction:column;gap:5px;}
+  .fig .n{font-family:'Archivo',sans-serif;font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;}
+  .fig .l{font-size:13.5px;color:var(--ink-2);line-height:1.35;}
+  .fig .s{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--ink-3);letter-spacing:.04em;}
+
+  /* quadrant matrix */
+  .matrix-wrap{display:grid;grid-template-columns:26px 1fr;gap:10px;}
+  .y-axis{
+    writing-mode:vertical-rl;transform:rotate(180deg);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);
+  }
+  .quads{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-strong);border:1px solid var(--rule-strong);border-radius:3px;overflow:hidden;}
+  .quad{background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:12px;min-height:150px;}
+  .quad.hot{background:var(--accent-soft);}
+  .quad-t{font-family:'Archivo',sans-serif;font-size:14.5px;font-weight:600;}
+  .quad-d{font-size:13px;color:var(--ink-2);line-height:1.4;}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;}
+  .chip{
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.02em;
+    padding:4px 9px;border-radius:2px;border:1px solid var(--rule-strong);
+    background:var(--surface);color:var(--ink);white-space:nowrap;
+  }
+  .chip.t1{background:var(--t1);border-color:var(--t1);color:var(--surface);}
+  :root[data-theme="dark"] .chip.t1,
+  .chip.t1{color:var(--ground);}
+  .chip.t2{border-color:var(--t2);color:var(--ink);box-shadow:inset 3px 0 0 var(--t2);}
+  .chip.t3{color:var(--ink-3);}
+  .x-axis{
+    grid-column:2;display:flex;justify-content:space-between;
+    font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);padding-top:8px;
+  }
+
+  /* ranked table */
+  .table-scroll{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface);}
+  table{border-collapse:collapse;width:100%;min-width:720px;font-size:14.5px;}
+  thead th{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--ink-3);text-align:left;font-weight:500;padding:13px 14px;
+    border-bottom:1px solid var(--rule-strong);white-space:nowrap;
+  }
+  tbody td{padding:13px 14px;border-bottom:1px solid var(--rule);vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  td.rank{font-family:'IBM Plex Mono',monospace;color:var(--ink-3);font-size:13px;width:34px;}
+  td.who{font-family:'Archivo',sans-serif;font-weight:600;font-size:14.5px;line-height:1.25;}
+  td.who a{text-decoration:none;border-bottom:1px solid var(--rule-strong);}
+  td.who a:hover{border-bottom-color:var(--accent);}
+  td.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;white-space:nowrap;font-size:13px;}
+  .barcell{min-width:132px;}
+  .bar-track{background:var(--bar-track);height:7px;border-radius:0 4px 4px 0;overflow:hidden;}
+  .bar-fill{background:var(--accent);height:100%;border-radius:0 4px 4px 0;display:block;}
+  .tier-tag{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    padding:3px 7px;border-radius:2px;white-space:nowrap;
+  }
+  .tier-tag.a{background:var(--t1);color:var(--ground);}
+  .tier-tag.b{border:1px solid var(--t2);color:var(--ink-2);}
+  .tier-tag.c{color:var(--ink-3);border:1px solid var(--rule);}
+  .conf{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-3);letter-spacing:.03em;}
+
+  /* cohort entries */
+  .cohort{
+    border-top:1px solid var(--rule-strong);padding-top:26px;
+    display:grid;grid-template-columns:1fr 300px;gap:36px;
+  }
+  .cohort-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .cohort-rank{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--ink-3);}
+  .cohort p{margin-bottom:14px;color:var(--ink-2);}
+  .cohort p.first{color:var(--ink);}
+  .sizing{
+    background:var(--surface-sunk);border-left:2px solid var(--accent);
+    padding:14px 16px;margin:0 0 16px;font-size:14px;color:var(--ink-2);
+  }
+  .sizing b{font-family:'Archivo',sans-serif;color:var(--ink);font-size:15px;}
+  .wedge{
+    background:var(--signal-soft);padding:14px 16px;font-size:14.5px;color:var(--ink);
+    border-left:2px solid var(--signal);margin-bottom:16px;
+  }
+  .wedge b{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--signal);display:block;margin-bottom:5px;}
+  .side{font-size:14px;}
+  .side h4{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--rule);
+  }
+  .side ul{margin:0 0 20px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px;}
+  .side li{color:var(--ink-2);line-height:1.4;padding-left:13px;position:relative;font-size:13.5px;}
+  .side li::before{content:"";position:absolute;left:0;top:8px;width:4px;height:4px;background:var(--accent);border-radius:50%;}
+  .side li b{color:var(--ink);font-weight:600;}
+  ol.plan{margin:0 0 14px;padding-left:20px;display:flex;flex-direction:column;gap:8px;color:var(--ink-2);font-size:15px;}
+  ol.plan li::marker{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-3);}
+  ol.plan b{color:var(--ink);}
+
+  /* generic prose lists */
+  ul.prose{margin:0 0 16px;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:10px;}
+  ul.prose li{padding-left:16px;position:relative;color:var(--ink-2);}
+  ul.prose li::before{content:"";position:absolute;left:0;top:11px;width:5px;height:5px;background:var(--accent);border-radius:50%;}
+  ul.prose li b{color:var(--ink);font-weight:600;}
+
+  /* timeline */
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;}
+  .phase{background:var(--surface);padding:22px;display:flex;flex-direction:column;gap:12px;}
+  .phase .when{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);}
+  .phase h3{font-size:17px;}
+  .phase ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:9px;}
+  .phase li{font-size:13.5px;color:var(--ink-2);line-height:1.4;padding-left:14px;position:relative;}
+  .phase li::before{content:"→";position:absolute;left:0;top:0;color:var(--ink-3);font-size:12px;}
+
+  .callout{
+    border:1px solid var(--rule-strong);border-radius:3px;background:var(--surface);
+    padding:22px 24px;box-shadow:var(--shadow);
+  }
+  .callout h3{margin-bottom:10px;}
+  .note{font-size:14px;color:var(--ink-2);line-height:1.6;}
+  .note b{color:var(--ink);}
+
+  .srcs{font-size:13px;color:var(--ink-3);line-height:1.7;}
+  .srcs a{color:var(--ink-2);}
+
+  @media (max-width:860px){
+    .cohort{grid-template-columns:1fr;gap:22px;}
+    .phases{grid-template-columns:1fr;}
+  }
+  @media (max-width:620px){
+    body{font-size:16px;}
+    .page{padding-left:16px;padding-right:16px;}
+    .quads{grid-template-columns:1fr;}
+    .matrix-wrap{grid-template-columns:1fr;}
+    .y-axis{writing-mode:horizontal-tb;transform:none;justify-content:flex-start;}
+    .x-axis{grid-column:1;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+</style>
+
+<div style="background:#1B2A2A;color:#EFEBE1;padding:12px 24px;font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;text-align:center;">
+INTERNAL PLANNING DOCUMENT &middot; not linked from the site and excluded from search &middot; <a href="index.html" style="color:#D9AC5E;">back to the site</a>
+</div>
+<div class="page">
+
+<header class="mast">
+  <div class="eyebrow">Go-to-market plan &middot; AK Life &amp; Legacy Planning</div>
+  <h1 style="margin-top:14px;">Atlanta Market Map</h1>
+  <p class="lede">Twelve audiences, sized for metro Atlanta, ranked by where a solo independent advisor should actually spend the next twelve months &mdash; with the specific networks that reach each one.</p>
+  <div class="mast-meta">
+    <span>Market: Atlanta&ndash;Sandy Springs&ndash;Roswell MSA</span>
+    <span>Pop. 6.26M &middot; ~2.4M households</span>
+    <span>Prepared September 2026</span>
+  </div>
+</header>
+
+<section>
+  <div class="col stack g16">
+    <div class="eyebrow">Read this first</div>
+    <h2>You cannot work twelve segments. Work three.</h2>
+    <p>The website has twelve audience pages because content should be specific. Your <em>calendar</em> is a different resource. A solo advisor who networks across twelve segments is a stranger in all of them; one who owns three becomes the person those communities refer to by name.</p>
+    <p>The ranking below is not by market size. It weighs three things: how many qualified prospects exist in metro Atlanta, how cheaply you can actually reach them, and how much revenue a placed case produces. Atlanta's largest cohort &mdash; corporate professionals &mdash; ranks seventh, because everyone else is already shouting at them. Its most distinctive one, an 850,000-person foreign-born population that ranks eleventh nationally, is barely served at all.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">The base</div>
+    <h2>What Atlanta actually contains</h2>
+    <p>Every cohort estimate further down is derived from these published figures. Where I had to reason from them rather than read a number directly, the derivation is shown and the confidence is labelled.</p>
+  </div>
+  <div class="figs">
+    <div class="fig"><span class="n">6.26M</span><span class="l">Metro population</span><span class="s">Census, 2024</span></div>
+    <div class="fig"><span class="n">~370K</span><span class="l">Households earning $200K+</span><span class="s">15.6% of ~2.4M HH</span></div>
+    <div class="fig"><span class="n">850K</span><span class="l">Foreign-born residents</span><span class="s">11th largest in US</span></div>
+    <div class="fig"><span class="n">150K+</span><span class="l">Businesses in the metro</span><span class="s">Metro Atlanta Chamber</span></div>
+    <div class="fig"><span class="n">17</span><span class="l">Fortune 500 headquarters</span><span class="s">37 in the Fortune 1000</span></div>
+    <div class="fig"><span class="n">2.5M</span><span class="l">Metro workforce</span><span class="s">Metro Atlanta Chamber</span></div>
+  </div>
+  <p class="note" style="margin-top:16px;max-width:74ch;">
+    <b>On the numbers.</b> Population, income distribution, immigrant population, business and Fortune 500 counts are published figures. Cohort sizes are my estimates, built from those figures plus occupational and industry ratios, and each carries a confidence label. They are precise enough to rank segments and size a budget; they are not precise enough to quote to a carrier. Before you spend real money on the top two, validate them &mdash; a morning on the Georgia Board of Health Care Workforce physician database and a call to two ethnic chambers of commerce will confirm or correct the two biggest bets on this page.
+  </p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">The strategic read</div>
+    <h2>Size is not the same as opportunity</h2>
+    <p>Placed on two axes that actually determine your return: how many qualified prospects exist, and how hard it is to get in front of one. The top-right quadrant is where a new practice gets built.</p>
+  </div>
+  <div class="matrix-wrap">
+    <div class="y-axis">Easy to reach &rarr;</div>
+    <div class="quads">
+      <div class="quad">
+        <div>
+          <div class="quad-t">Smaller, but easy to reach</div>
+          <div class="quad-d">Efficient. Defined membership organisations, warm channels, low competition. Work these alongside a Tier 1 segment rather than as your headline.</div>
+        </div>
+        <div class="chips">
+          <span class="chip t2">Real estate investors</span>
+          <span class="chip t2">Franchise &amp; multi-unit</span>
+          <span class="chip t3">Attorneys &amp; CPAs &rarr; partners</span>
+        </div>
+      </div>
+      <div class="quad hot">
+        <div>
+          <div class="quad-t">Large and reachable &mdash; start here</div>
+          <div class="quad-d">Enough prospects to sustain a practice, and an existing structure &mdash; residency programmes, community institutions, chambers &mdash; that puts you in a room with them.</div>
+        </div>
+        <div class="chips">
+          <span class="chip t1">Healthcare professionals</span>
+          <span class="chip t1">Global &amp; cross-border families</span>
+          <span class="chip t1">Business succession</span>
+          <span class="chip t2">Pre-retirees</span>
+        </div>
+      </div>
+      <div class="quad">
+        <div>
+          <div class="quad-t">Small and hard &mdash; not in this metro</div>
+          <div class="quad-d">Gated by intermediaries, or simply not concentrated in Atlanta. Take the case if it walks in; do not build a channel for it.</div>
+        </div>
+        <div class="chips">
+          <span class="chip t3">Athletes &amp; entertainers</span>
+          <span class="chip t3">Farm &amp; ranch families</span>
+        </div>
+      </div>
+      <div class="quad">
+        <div>
+          <div class="quad-t">Large but hard &mdash; buy the traffic</div>
+          <div class="quad-d">Huge pools with no natural room to walk into and heavy incumbent competition. These convert through search and paid media, not networking. Let the website work them.</div>
+        </div>
+        <div class="chips">
+          <span class="chip t2">Corporate professionals</span>
+          <span class="chip t3">Tech &amp; equity comp</span>
+        </div>
+      </div>
+    </div>
+    <div class="x-axis"><span>&larr; Fewer prospects</span><span>More prospects &rarr;</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Ranked</div>
+    <h2>The twelve, in the order I would work them</h2>
+    <p>Bars show estimated qualified prospects in the metro, on a shared scale. Revenue per case is a rough first-year commission band for a typical placed case in that segment &mdash; the reason a segment with 9,000 prospects can outrank one with 180,000.</p>
+  </div>
+  <div class="table-scroll">
+    <table>
+      <caption class="visually-hidden" style="position:absolute;left:-9999px;">Twelve audience segments ranked by recommended priority, with estimated metro Atlanta market size, confidence, and revenue per case.</caption>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Audience</th>
+          <th scope="col">Est. qualified prospects</th>
+          <th scope="col">Relative size</th>
+          <th scope="col">Confidence</th>
+          <th scope="col">Revenue / case</th>
+          <th scope="col">Tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="rank">01</td>
+          <td class="who">Healthcare professionals</td>
+          <td class="num">~28,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:16%"></span></span></td>
+          <td class="conf">Medium</td>
+          <td class="num">$4K&ndash;15K</td>
+          <td><span class="tier-tag a">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td class="rank">02</td>
+          <td class="who">Global &amp; cross-border families</td>
+          <td class="num">35,000&ndash;50,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:26%"></span></span></td>
+          <td class="conf">Medium</td>
+          <td class="num">$3K&ndash;20K</td>
+          <td><span class="tier-tag a">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td class="rank">03</td>
+          <td class="who">Legacy founders <span style="font-weight:400;color:var(--ink-3);">(sell side)</span></td>
+          <td class="num">5,000&ndash;8,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:4%"></span></span></td>
+          <td class="conf">Low&ndash;Med</td>
+          <td class="num">$15K&ndash;80K+</td>
+          <td><span class="tier-tag a">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td class="rank">04</td>
+          <td class="who">Next-gen owners <span style="font-weight:400;color:var(--ink-3);">(buy side)</span></td>
+          <td class="num">8,000&ndash;12,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:6%"></span></span></td>
+          <td class="conf">Low&ndash;Med</td>
+          <td class="num">$6K&ndash;30K</td>
+          <td><span class="tier-tag a">Tier 1</span></td>
+        </tr>
+        <tr>
+          <td class="rank">05</td>
+          <td class="who">Pre-retirees &amp; recent exits</td>
+          <td class="num">90,000&ndash;120,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:60%"></span></span></td>
+          <td class="conf">Medium</td>
+          <td class="num">$5K&ndash;25K</td>
+          <td><span class="tier-tag b">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td class="rank">06</td>
+          <td class="who">Real estate investors</td>
+          <td class="num">~10,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:5%"></span></span></td>
+          <td class="conf">Low</td>
+          <td class="num">$4K&ndash;20K</td>
+          <td><span class="tier-tag b">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td class="rank">07</td>
+          <td class="who">Franchise &amp; multi-unit</td>
+          <td class="num">4,500&ndash;6,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:3%"></span></span></td>
+          <td class="conf">Low</td>
+          <td class="num">$5K&ndash;25K</td>
+          <td><span class="tier-tag b">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td class="rank">08</td>
+          <td class="who">Corporate professionals</td>
+          <td class="num">150,000&ndash;200,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:100%"></span></span></td>
+          <td class="conf">Med&ndash;High</td>
+          <td class="num">$1.5K&ndash;8K</td>
+          <td><span class="tier-tag b">Tier 2</span></td>
+        </tr>
+        <tr>
+          <td class="rank">09</td>
+          <td class="who">Attorneys, CPAs &amp; partners</td>
+          <td class="num">7,000&ndash;9,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:5%"></span></span></td>
+          <td class="conf">Medium</td>
+          <td class="num">$5K&ndash;20K</td>
+          <td><span class="tier-tag c">Tier 3</span></td>
+        </tr>
+        <tr>
+          <td class="rank">10</td>
+          <td class="who">Tech &amp; equity comp</td>
+          <td class="num">25,000&ndash;40,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:20%"></span></span></td>
+          <td class="conf">Low</td>
+          <td class="num">$2K&ndash;12K</td>
+          <td><span class="tier-tag c">Tier 3</span></td>
+        </tr>
+        <tr>
+          <td class="rank">11</td>
+          <td class="who">Athletes &amp; entertainers</td>
+          <td class="num">3,000&ndash;8,000</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:4%"></span></span></td>
+          <td class="conf">Low</td>
+          <td class="num">$8K&ndash;60K</td>
+          <td><span class="tier-tag c">Tier 3</span></td>
+        </tr>
+        <tr>
+          <td class="rank">12</td>
+          <td class="who">Farm &amp; ranch families</td>
+          <td class="num">3,000&ndash;4,500</td>
+          <td class="barcell"><span class="bar-track"><span class="bar-fill" style="width:2%"></span></span></td>
+          <td class="conf">Low</td>
+          <td class="num">$10K&ndash;50K</td>
+          <td><span class="tier-tag c">Tier 3</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:14px;max-width:74ch;">Legacy founders and next-gen owners are two sides of one transaction and should be worked as a single "succession" practice &mdash; one relationship frequently produces policies on both generations. They are listed separately because the conversation, and the website page, differ.</p>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Tier 1 &mdash; the next 90 days</div>
+    <h2>Three segments, worked properly</h2>
+  </div>
+
+  <div class="stack g48">
+
+    <!-- 1 -->
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">01</span><h3>Healthcare professionals</h3></div>
+        <div class="sizing">
+          <b>~28,000 high-value clinicians</b> in the metro &mdash; roughly 19,000 physicians (6.26M residents at ~300 per 100,000; Fulton County alone runs ~460 per 100,000), plus ~2,300 dentists, ~1,400 CRNAs and ~5,500 nurse practitioners. Around 15,000 sit in the prime 30&ndash;55 planning window. Add ~48,000 RNs as a lower-premium volume layer. <span class="conf">Confidence: Medium &mdash; physician count derived from county density ratios.</span>
+        </div>
+        <p class="first">The best first segment in Atlanta, and it is not close. Emory, Piedmont, Wellstar, Northside, Grady and Children's put a dense, geographically concentrated population of high earners inside institutions that already run education programming you can be invited into. The pain is urgent and concrete rather than abstract: residents graduate with private loans that are not discharged at death, and specialists carry a disability risk that group coverage handles badly.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          Do not lead with life insurance. Lead with <strong>"what happens to your private student loans if you die"</strong> and <strong>own-occupation disability</strong>. Both are specific, both are usually uncovered, and neither sounds like a sales pitch. The life conversation follows on its own.
+        </div>
+        <ol class="plan">
+          <li><b>Own the residency circuit.</b> Residents and fellows get essentially zero financial education and every programme has a noon conference slot to fill. Offer a genuinely non-commercial 30-minute talk: loan repayment, disability definitions, what the hospital benefit does and does not cover. Target the programme coordinator, not the chair.</li>
+          <li><b>Go where dentists already gather.</b> The Hinman Dental Meeting in Atlanta is one of the largest dental meetings in the country and draws practice owners with buy-in debt and no funded buy-sell. Attend before you ever exhibit.</li>
+          <li><b>Build two referral partners</b> who serve clinicians and do not sell insurance: a CPA with a physician practice book, and a healthcare transactions attorney doing practice acquisitions.</li>
+          <li><b>Paid search, narrow and high-intent:</b> "own occupation disability insurance Atlanta", "physician disability insurance Georgia". Low volume, high intent, cheap relative to generic life insurance terms.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>Medical Association of Atlanta</b> &mdash; the metro physician body; events and sponsorship</li>
+          <li><b>Residency &amp; fellowship programmes</b> at Emory, Morehouse School of Medicine, Wellstar/MCG, Piedmont &mdash; noon conference talks</li>
+          <li><b>Hinman Dental Meeting</b> &amp; Georgia Dental Association, Northern District</li>
+          <li><b>Georgia Association of Nurse Anesthetists</b> &mdash; CRNAs, high income, own-occ sensitive</li>
+          <li><b>Georgia Academy of Family Physicians</b>; specialty societies</li>
+          <li><b>Atlanta Medical Association</b> &mdash; historically Black physician network</li>
+          <li><b>Physician mom / specialty groups</b> on Facebook &amp; WhatsApp &mdash; referral-dense, permission required</li>
+          <li><b>Hospital CME and benefits fairs</b> &mdash; via practice administrators</li>
+        </ul>
+        <h4>Site page to point at</h4>
+        <ul><li>healthcare-professionals.html</li></ul>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">02</span><h3>Global &amp; cross-border families</h3></div>
+        <div class="sizing">
+          <b>35,000&ndash;50,000 qualifying households.</b> Metro Atlanta holds roughly <b>850,000 foreign-born residents</b> &mdash; the 11th largest immigrant population of any US metro &mdash; including 100,000+ Indian, ~48,000 Korean and ~20,000 Nigerian residents, plus substantial Vietnamese, Chinese, Mexican, Brazilian and Ethiopian communities. Applying a conservative 12&ndash;18% high-income-or-US-asset filter to ~280,000 immigrant households gives the range. <span class="conf">Confidence: Medium &mdash; base population published; income subset estimated.</span>
+        </div>
+        <p class="first">This is Atlanta's most distinctive and least served opportunity. Two-thirds of the metro's population growth since 2020 came from international migration. The technical need is real and almost nobody explains it: property passing to a spouse who is not a US citizen does not get the unlimited marital deduction, and a non-resident who owns US real estate faces estate tax above an exemption a small fraction of a citizen's. Families discover this at the worst possible moment.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          <strong>"If your spouse is not a US citizen, the estate tax rules are different for you."</strong> It is factual, it is alarming in the way true things sometimes are, and virtually no advisor in this market is saying it. Pair it with the reverse case: parents abroad who own US property.
+        </div>
+        <ol class="plan">
+          <li><b>Pick one community and go deep.</b> Not "immigrants" &mdash; one community, ideally one where you have genuine ties, language or existing relationships. Credibility here is earned through presence over months, and spread across five communities you have none.</li>
+          <li><b>Partner with cross-border professionals first.</b> Immigration attorneys, cross-border CPAs and international tax preparers already have the trust and see the trigger events. These are the highest-value referral partners in this entire document.</li>
+          <li><b>Show up at institutions, not events.</b> Temples, gurdwaras, mosques and churches run financial literacy and senior programming. BAPS Shri Swaminarayan Mandir in Lilburn and the Hindu Temple of Atlanta anchor enormous communities.</li>
+          <li><b>Advertise in community media,</b> which is cheap and read: <em>Khabar</em> (Atlanta's Indian community magazine), Korean-language dailies, community radio and WhatsApp groups.</li>
+          <li><b>Get carrier clarity early.</b> Foreign national underwriting varies enormously by carrier, visa category and travel pattern. Know which of your carriers will write a client on an H-1B or an E-2 before you promise anything.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>Georgia Indo-American Chamber of Commerce</b>; India American Cultural Association (IACA)</li>
+          <li><b>Korean American Chamber of Commerce of Greater Atlanta</b>; Korean Community Center</li>
+          <li><b>Nigerian and Ethiopian community associations</b> &mdash; among the fastest-growing in the metro</li>
+          <li><b>BAPS Mandir Lilburn</b>, Hindu Temple of Atlanta, community mosques and churches</li>
+          <li><b>Ethnic media</b> &mdash; Khabar magazine, Korean-language dailies, community radio</li>
+          <li><b>Immigration attorneys &amp; cross-border CPAs</b> &mdash; the referral engine</li>
+          <li><b>Welcoming Atlanta</b> / city international affairs programming</li>
+          <li><b>Employer ERGs</b> at large Atlanta employers with big visa populations</li>
+        </ul>
+        <h4>Site page to point at</h4>
+        <ul><li>global-families.html</li></ul>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">03&ndash;04</span><h3>Business succession &mdash; founders and successors</h3></div>
+        <div class="sizing">
+          <b>5,000&ndash;8,000 companies with an owner aged 55+</b> facing a transition inside ten years, and <b>8,000&ndash;12,000</b> identifiable successors. Derived from 150,000+ metro businesses, of which roughly 100,000&ndash;110,000 are employer firms; applying a ~15% filter for $2M+ revenue and a family-ownership and owner-age screen. <span class="conf">Confidence: Low&ndash;Medium &mdash; directionally sound, individually unverified.</span>
+        </div>
+        <p class="first">The smallest pool on this page and the largest revenue per case, by an order of magnitude. An estate-liquidity survivorship policy for a founder with a $12M company is a different business from a term policy for a 35-year-old. It is also the longest sales cycle in this document &mdash; twelve to eighteen months is normal &mdash; which is precisely why it belongs in the first 90 days rather than year two. Start the relationships now so they mature when you need revenue.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          <strong>"If the business is 80% of your estate and one of your three children works in it, what do the other two get?"</strong> Every founder has thought about this and most have not resolved it. It is a question, not a pitch, and it opens the entire conversation &mdash; ILIT, equalisation, funded buy-sell, key person.
+        </div>
+        <ol class="plan">
+          <li><b>Kennesaw State's Cox Family Enterprise Center</b> is the single highest-leverage door in Atlanta for this segment &mdash; one of the country's oldest family-business centres, with programming, a family business forum and exactly the right audience.</li>
+          <li><b>Join the transaction ecosystem, not the chamber circuit.</b> Exit Planning Institute's Atlanta chapter, ACG Atlanta, and the Georgia Association of Business Brokers put you next to the M&amp;A attorneys, business brokers and CPAs who see succession before anyone else.</li>
+          <li><b>Consider the CEPA credential</b> (Certified Exit Planning Advisor). In this segment the letters buy you a seat at tables that would otherwise be closed, and it signals you are not a product salesperson.</li>
+          <li><b>Peer groups where owners actually talk:</b> Vistage Atlanta, EO Atlanta, YPO. You generally cannot sell into these directly &mdash; you get in by being the speaker who taught something useful.</li>
+          <li><b>Work both generations at once.</b> The successor needs coverage on the purchase note and the personal guarantees they just signed; the founder needs estate liquidity and equalisation. One relationship, two or three placed cases.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>Cox Family Enterprise Center, Kennesaw State</b> &mdash; family business forum</li>
+          <li><b>Exit Planning Institute &mdash; Atlanta chapter</b></li>
+          <li><b>ACG Atlanta</b> (Association for Corporate Growth)</li>
+          <li><b>Georgia Association of Business Brokers</b></li>
+          <li><b>Vistage / EO Atlanta / YPO</b> &mdash; owner peer groups, speak don't sell</li>
+          <li><b>County chambers</b> &mdash; Gwinnett, Cobb, North Fulton, Cherokee, Alpharetta</li>
+          <li><b>UGA Small Business Development Center</b> &mdash; Atlanta office</li>
+          <li><b>M&amp;A attorneys, valuation firms, SBA lenders</b> &mdash; referral partners</li>
+        </ul>
+        <h4>Site pages to point at</h4>
+        <ul><li>legacy-founders.html</li><li>next-gen-owners.html</li></ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Tier 2 &mdash; months 4 to 12</div>
+    <h2>Add these once Tier 1 is producing</h2>
+    <p>Real opportunities that either compete harder, convert more slowly, or depend on a channel you have to build first. Do not start them until the first three are generating booked calls without your daily attention.</p>
+  </div>
+
+  <div class="stack g48">
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">05</span><h3>Pre-retirees &amp; recent exits</h3></div>
+        <div class="sizing">
+          <b>90,000&ndash;120,000 households.</b> Roughly 1.1M metro residents are aged 55&ndash;70 (~17.5% of 6.26M), forming about 600,000 households; an estimated 15&ndash;20% hold $500K+ in investable assets. <span class="conf">Confidence: Medium.</span>
+        </div>
+        <p class="first">The largest genuinely qualified pool on this page &mdash; and the most crowded. Every advisor, annuity marketer and seminar company in Atlanta targets this demographic, which makes generic "retirement planning" messaging worthless. Your differentiation has to be specific.</p>
+        <div class="wedge">
+          <b>The wedge &mdash; Atlanta-specific</b>
+          <strong>Delta, UPS, Home Depot, Coca-Cola and Southern Company retirees.</strong> Atlanta has an unusually large concentration of long-tenure employees at a handful of giant employers, with large pre-tax balances and defined pension decisions. <strong>Delta pilots in particular</strong> are a near-perfect niche: very high income, mandatory retirement at 65, huge 401(k) balances, a loss-of-licence risk with a specific insurance answer, and an exceptionally tight referral culture.
+        </div>
+        <ol class="plan">
+          <li><b>Build one employer-specific asset</b> &mdash; a genuinely useful guide to that company's pension election, retiree medical bridge and 401(k) rollover decision. Employer-specific beats generic by an enormous margin.</li>
+          <li><b>Lead with the SECURE Act ten-year rule.</b> Most people in this cohort still believe their children can stretch an inherited IRA over a lifetime. Correcting that belief opens the Roth conversion and life-insurance-as-legacy-asset conversation naturally.</li>
+          <li><b>Run seminars &mdash; carefully.</b> This works, and it is the most heavily regulated marketing in insurance. Senior-focused seminar rules, advertising review and meal-event restrictions all apply. Get the deck approved before you book the room.</li>
+          <li><b>Meta advertising works here</b> in a way it does not for younger cohorts: cheap, precise age and interest targeting, and this audience is genuinely on Facebook.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>Large-employer retiree associations</b> &mdash; Delta, UPS, Home Depot, Coca-Cola, Southern Company</li>
+          <li><b>Delta pilot community / ALPA-adjacent networks</b> &mdash; referral-dense</li>
+          <li><b>OLLI programmes</b> at Emory and Kennesaw State</li>
+          <li><b>Estate planning attorneys &amp; CPAs</b> &mdash; primary referral source</li>
+          <li><b>Rotary, church and civic groups</b> &mdash; seminar venues</li>
+          <li><b>Atlanta Estate Planning Council</b></li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>pre-retirees.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">06</span><h3>Real estate investors</h3></div>
+        <div class="sizing">
+          <b>~10,000 serious operators</b> (five or more doors, or commercial), within a wider pool of roughly 45,000&ndash;60,000 metro landlords holding two or more properties. Atlanta is consistently a top-tier US single-family rental investment market. <span class="conf">Confidence: Low &mdash; landlord counts are not cleanly published.</span>
+        </div>
+        <p class="first">Unusually easy to reach for the income level, because this group self-organises into meetups obsessively. They are also already comfortable with leverage and liquidity arguments, which makes the cash-value conversation land in a way it does not with most audiences.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          <strong>"What is the total dollar amount of your personal guarantees?"</strong> Most investors have never added it up. The follow-on &mdash; using cash value as fast, uncommitted deal capital for earnest money and capital calls &mdash; is the part they will actually want to talk about.
+        </div>
+        <ol class="plan">
+          <li><b>Become a fixture at Atlanta REIA</b> and the larger BiggerPockets-style meetups. Attend for two months before you ever ask for anything.</li>
+          <li><b>Partner with the lenders.</b> Hard money lenders and commercial banks frequently require collateral assignment of a policy &mdash; and their borrowers usually buy whatever is put in front of them. Being the person the lender recommends is a durable channel.</li>
+          <li><b>Also partner with 1031 exchange intermediaries</b> and CCIM-designated brokers, who see liquidity events as they happen.</li>
+          <li><b>Teach, don't pitch:</b> a 20-minute meetup slot on "what happens to your portfolio if you die owing $2.8M in guaranteed debt" earns more meetings than any booth.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>Atlanta REIA</b> and county investor meetups</li>
+          <li><b>Atlanta Apartment Association</b></li>
+          <li><b>Atlanta Commercial Board of Realtors</b>; CCIM Georgia chapter</li>
+          <li><b>ULI Atlanta</b> &mdash; developers and institutional players</li>
+          <li><b>Hard money lenders &amp; 1031 qualified intermediaries</b></li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>real-estate-investors.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">07</span><h3>Franchise &amp; multi-unit operators</h3></div>
+        <div class="sizing">
+          <b>4,500&ndash;6,000 franchisee entities</b> operating an estimated 14,000 metro establishments. Atlanta is also a franchising capital on the <em>franchisor</em> side &mdash; Inspire Brands, GoTo Foods and Chick-fil-A are all headquartered here. <span class="conf">Confidence: Low &mdash; establishment-to-owner ratio estimated.</span>
+        </div>
+        <p class="first">Small, but with a structural advantage no other segment has: somebody else has already made the sale for you. SBA lenders routinely require a collaterally assigned life policy, and franchise agreements typically require an approved continuity plan. You are not creating demand, you are meeting an existing contractual obligation better than the default option.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          <strong>"Your lender is going to require a policy anyway &mdash; you do not have to buy theirs."</strong> Lender-arranged coverage is often oversized, overpriced, and leaves the owner with nothing once the loan amortises.
+        </div>
+        <ol class="plan">
+          <li><b>Build relationships with SBA 7(a) lenders first.</b> This is the whole strategy. Georgia has an active SBA lending community and every one of those loans generates a life insurance requirement.</li>
+          <li><b>Add franchise brokers and consultants</b> (FranNet and similar), who work with buyers at exactly the moment financing is being arranged.</li>
+          <li><b>Learn to read a franchise agreement's transfer clause.</b> Being able to tell an owner what their specific brand requires on death is an immediate credibility win.</li>
+          <li><b>Pitch retention, not just protection:</b> Section 162 bonus plans to hold general managers are an easy sell in an industry with brutal turnover, and they raise the owner's eventual sale multiple.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>SBA 7(a) preferred lenders in Georgia</b> &mdash; the primary channel</li>
+          <li><b>Southeast Franchise Forum</b>; IFA events</li>
+          <li><b>Franchise brokers</b> &mdash; FranNet, FranChoice and similar</li>
+          <li><b>Multi-unit franchisee conferences</b> and brand operator councils</li>
+          <li><b>Georgia Restaurant Association</b> for food-service concepts</li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>franchise-owners.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">08</span><h3>Corporate professionals</h3></div>
+        <div class="sizing">
+          <b>150,000&ndash;200,000 individuals</b> in manager-and-above roles earning $200K+ in total compensation &mdash; the largest pool on this page, drawn from ~370,000 metro households above $200K and a 2.5M-person workforce with 17 Fortune 500 headquarters. <span class="conf">Confidence: Medium&ndash;High.</span>
+        </div>
+        <p class="first">Ranked eighth despite being the largest, for one reason: there is no room to walk into. There is no "association of Atlanta VPs." They are reached through search, paid media and content &mdash; which is exactly what the website is for &mdash; rather than through relationships. Treat this as the segment your marketing works while you work the others in person.</p>
+        <div class="wedge">
+          <b>The wedge</b>
+          <strong>"Your group life is two times base salary. Half your pay is bonus and RSUs."</strong> Concrete, checkable in sixty seconds on their own benefits portal, and immediately uncomfortable.
+        </div>
+        <ol class="plan">
+          <li><b>LinkedIn is the only precise channel here</b> &mdash; targetable by employer, title and seniority. It is expensive per click; use it for a specific offer, not brand awareness.</li>
+          <li><b>Time campaigns to open enrolment</b> (October&ndash;November) and to layoff news cycles, when portability suddenly becomes concrete.</li>
+          <li><b>Work alumni networks:</b> Georgia Tech, UGA Terry, Emory Goizueta and Kennesaw Coles all have active Atlanta professional chapters.</li>
+          <li><b>Let the content do the work.</b> This is the cohort most likely to research alone before ever contacting anyone &mdash; the corporate-executives page should carry them most of the way.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Networks that reach them</h4>
+        <ul>
+          <li><b>LinkedIn paid</b> &mdash; employer and title targeting</li>
+          <li><b>Google Search</b> &mdash; high-intent benefit and RSU queries</li>
+          <li><b>University alumni chapters</b> &mdash; Georgia Tech, UGA, Emory, KSU</li>
+          <li><b>Employee resource groups</b> at major employers</li>
+          <li><b>Employee benefits brokers</b> &mdash; referrals for supplemental coverage</li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>corporate-executives.html</li></ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Tier 3 &mdash; park, or reframe</div>
+    <h2>Four segments not to build a channel for</h2>
+    <p>These stay on the website &mdash; the pages cost nothing to keep and will catch organic search. What they should not get is your calendar.</p>
+  </div>
+
+  <div class="stack g48">
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">09</span><h3>Attorneys, CPAs &amp; practice partners &mdash; <span style="color:var(--signal);">reframe as partners</span></h3></div>
+        <div class="sizing">
+          <b>7,000&ndash;9,000 partners and practice owners</b> in the metro, within roughly 25,000&ndash;30,000 attorneys and ~12,000 CPAs. The State Bar of Georgia reported over 37,000 active members as far back as 2015; the Georgia Society of CPAs has about 14,000 members statewide. <span class="conf">Confidence: Medium; bar figure is dated.</span>
+        </div>
+        <p class="first">The most valuable strategic correction in this document. These are good prospects &mdash; unfunded partnership buy-sells are endemic and business overhead expense coverage is almost universally missing. But they are worth far more to you as <strong>referral partners</strong>, because they sit on top of every other segment on this page: the estate attorney serves your founders and pre-retirees, the cross-border CPA serves your immigrant families, the healthcare transactions attorney serves your physicians.</p>
+        <div class="wedge">
+          <b>The reframe</b>
+          Approach every attorney and CPA as a potential referral relationship first. If a personal case emerges from that relationship, excellent &mdash; but a CPA who sends you four founders a year is worth more than a CPA who buys one policy.
+        </div>
+        <ol class="plan">
+          <li><b>Target twelve partners in twelve months</b> &mdash; roughly one substantive coffee or lunch per week. Prioritise estate attorneys, cross-border CPAs, business brokers, SBA lenders and M&amp;A counsel.</li>
+          <li><b>Join the Atlanta Estate Planning Council</b> &mdash; it exists precisely to connect advisors, attorneys, CPAs and trust officers.</li>
+          <li><b>Give before you ask.</b> Send them a client, or run a joint educational session where they present and you host. Reciprocity is the entire mechanism.</li>
+          <li><b>Know Georgia's anti-rebating and referral-compensation rules</b> before any arrangement involves money changing hands.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>Where to find them</h4>
+        <ul>
+          <li><b>Atlanta Estate Planning Council</b></li>
+          <li><b>Atlanta Bar Association</b>; State Bar of Georgia sections</li>
+          <li><b>Georgia Society of CPAs (GSCPA)</b> &mdash; Atlanta chapter events</li>
+          <li><b>ProVisors-style referral groups</b> and structured BNI chapters</li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>attorneys-cpas.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">10</span><h3>Tech &amp; equity compensation</h3></div>
+        <div class="sizing">
+          <b>25,000&ndash;40,000 meaningfully equity-compensated professionals</b> within a metro tech workforce commonly put at 150,000+. The Technology Association of Georgia is one of the largest state tech bodies in the country. <span class="conf">Confidence: Low.</span>
+        </div>
+        <p class="first">Large, visible, and a poor fit for a new independent advisor &mdash; for a reason specific to Atlanta. This is not San Francisco: Atlanta's equity story is dominated by <em>public-company RSUs</em> in payments and fintech (Global Payments, Fiserv, NCR Voyix, InComm &mdash; the "Transaction Alley" cluster processes a large share of US card transactions) rather than pre-IPO option grants. The dramatic pitch &mdash; borrow against cash value to exercise options before they expire &mdash; applies to far fewer people here than the page implies. Meanwhile this cohort researches independently, distrusts commissioned advice, and defaults to index funds.</p>
+        <div class="wedge">
+          <b>If you work it anyway</b>
+          Skip the equity mechanics and lead with <strong>estate planning before a liquidity event</strong> for the genuine pre-IPO population around ATDC and Atlanta Tech Village. That is a narrow, real, time-sensitive need.
+        </div>
+        <ol class="plan">
+          <li><b>Technology Association of Georgia (TAG)</b> and Venture Atlanta are the front doors if you pursue it.</li>
+          <li><b>Otherwise, let the page rank</b> and spend the hours on Tier 1.</li>
+        </ol>
+      </div>
+      <div class="side">
+        <h4>If you pursue it</h4>
+        <ul>
+          <li><b>Technology Association of Georgia (TAG)</b></li>
+          <li><b>ATDC at Georgia Tech</b>; Atlanta Tech Village</li>
+          <li><b>Venture Atlanta</b> &mdash; annual conference</li>
+          <li><b>Startup and fintech founder meetups</b></li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>tech-equity.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">11</span><h3>Athletes &amp; entertainers</h3></div>
+        <div class="sizing">
+          <b>~200 active professional athletes</b> across the Falcons, Hawks, Braves, Atlanta United and Dream combined. The larger opportunity is entertainment &mdash; Georgia's film industry (Trilith, Tyler Perry Studios) and Atlanta's position as a global music capital &mdash; giving perhaps <b>3,000&ndash;8,000</b> individuals with substantial, volatile income. <span class="conf">Confidence: Low.</span>
+        </div>
+        <p class="first">Glamorous and structurally inaccessible. Athletes are gated by agents, business managers and league advisor-registration programmes with real credential requirements. Entertainment talent is gated by business managers who guard the relationship carefully. The economics can be excellent; the odds that cold effort produces a case in year one are poor.</p>
+        <div class="wedge">
+          <b>Only if</b>
+          You already have a warm relationship with a business manager, sports agent or entertainment attorney. Without that, this is a hobby, not a channel.
+        </div>
+      </div>
+      <div class="side">
+        <h4>The gatekeepers</h4>
+        <ul>
+          <li><b>Business managers &amp; entertainment attorneys</b> &mdash; the only real door</li>
+          <li><b>League advisor registration programmes</b> &mdash; credential prerequisites</li>
+          <li><b>Film production payroll &amp; accounting firms</b> in the Georgia industry</li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>athletes-entertainers.html</li></ul>
+      </div>
+    </div>
+
+    <div class="cohort">
+      <div>
+        <div class="cohort-h"><span class="cohort-rank">12</span><h3>Farm &amp; ranch families &mdash; <span style="color:var(--signal);">right business, wrong metro</span></h3></div>
+        <div class="sizing">
+          Georgia has <b>39,264 farms</b> across 9.9M acres producing $13.2B annually, and 83.6% are family-owned &mdash; a genuinely excellent succession market. But metro Atlanta's share is small and concentrated in outer-ring counties like Carroll, Coweta, Newton, Walton and Jackson: perhaps <b>3,000&ndash;4,500 farms</b>, skewing small-acreage. <span class="conf">Confidence: Medium on the state figure, Low on the metro split.</span>
+        </div>
+        <p class="first">The land-rich, cash-poor equalisation problem is real and the cases are large &mdash; it is simply not an Atlanta business. The money is in South and Middle Georgia. Keep the page; it will rank for statewide searches and the occasional inbound case will be worth having. Revisit deliberately if you ever decide to work Georgia beyond the metro.</p>
+      </div>
+      <div class="side">
+        <h4>If you expand statewide</h4>
+        <ul>
+          <li><b>Georgia Farm Bureau</b> county chapters</li>
+          <li><b>UGA Cooperative Extension</b> county agents</li>
+          <li><b>Georgia Cattlemen's Association</b>; Young Farmers</li>
+          <li><b>Farm Credit and agricultural lenders</b></li>
+        </ul>
+        <h4>Site page</h4>
+        <ul><li>farm-ranch-families.html</li></ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Underneath all of it</div>
+    <h2>The engine that does not depend on which segment you pick</h2>
+  </div>
+  <div class="col">
+    <ul class="prose">
+      <li><b>Referral partnerships are the only channel that compounds.</b> Paid traffic stops when you stop paying. A CPA who trusts you sends clients for a decade. Twelve substantive partner relationships in twelve months &mdash; one lunch a week &mdash; is the single highest-return commitment in this plan. Prioritise estate attorneys, cross-border CPAs, business brokers, SBA lenders and M&amp;A counsel.</li>
+      <li><b>Teach, and the selling takes care of itself.</b> Every Tier 1 and Tier 2 segment on this page has an existing venue that needs speakers: noon conferences, meetup slots, chamber breakfasts, temple programmes, retiree groups. A genuinely non-commercial 25-minute talk generates more qualified conversations than any advertisement, and it costs you time rather than money &mdash; which is the right trade early on.</li>
+      <li><b>Local search is cheap and you already have the assets.</b> Twelve deep, specific pages is unusual in this industry. Claim and fill the Google Business Profile, build toward 20+ genuine reviews, and add Atlanta-specific language to the pages you actually work. Target long-tail intent &mdash; "own occupation disability insurance Atlanta" &mdash; not "life insurance", which you cannot win.</li>
+      <li><b>Fix the form before anything else.</b> The site currently discards every submission. Every hour of marketing spent before that is fixed is wasted, and the fix takes twenty minutes.</li>
+      <li><b>Track one number: cost per booked call.</b> Not clicks, not impressions. Expect $150&ndash;400 per booked consultation in paid channels; referral and speaking channels should come in far below that, which is the entire argument for prioritising them.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Sequence</div>
+    <h2>Twelve months, in three moves</h2>
+  </div>
+  <div class="phases">
+    <div class="phase">
+      <div class="when">Days 1&ndash;90</div>
+      <h3>Foundation and one segment</h3>
+      <ul>
+        <li>Wire the lead form; get carrier and compliance advertising approval for the site</li>
+        <li>Confirm licensing in Georgia and any neighbouring states you intend to write</li>
+        <li>Pick <strong>one</strong> Tier 1 segment &mdash; healthcare is the default recommendation</li>
+        <li>Book three speaking slots: residency noon conferences, a meetup, a chamber breakfast</li>
+        <li>Start four referral conversations; aim to convert two</li>
+        <li>Validate the two biggest sizing assumptions with real local data</li>
+        <li>Google Business Profile live, first ten reviews</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="when">Months 4&ndash;6</div>
+      <h3>Second segment, first paid spend</h3>
+      <ul>
+        <li>Add the second Tier 1 segment &mdash; global families or succession</li>
+        <li>Begin succession relationships now regardless; they take 12&ndash;18 months to mature</li>
+        <li>First paid campaign: narrow, high-intent search on your Tier 1 wedge terms</li>
+        <li>Build the employer-specific pre-retiree asset (Delta or UPS)</li>
+        <li>Referral partners: six active</li>
+        <li>Measure cost per booked call and kill anything above $400</li>
+      </ul>
+    </div>
+    <div class="phase">
+      <div class="when">Months 7&ndash;12</div>
+      <h3>Depth, then breadth</h3>
+      <ul>
+        <li>Third segment only if the first two run without daily attention</li>
+        <li>Consider the CEPA credential if succession is producing</li>
+        <li>Layer in Tier 2: real estate meetups, SBA lender relationships</li>
+        <li>Turn on LinkedIn for corporate professionals if budget allows</li>
+        <li>Referral partners: twelve active</li>
+        <li>Review the ranking against your actual closed cases &mdash; your data beats this page</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:28px;">
+    <h3>A realistic budget</h3>
+    <p style="color:var(--ink-2);font-size:15px;">For a solo advisor, plan on roughly <strong>$1,500&ndash;3,000 per month</strong> in the first year: $600&ndash;1,200 paid search and social, $300&ndash;600 memberships and event fees, $200&ndash;400 CRM and email, $200&ndash;500 seminar and hospitality costs, and a reserve for credentials. The largest input is not money &mdash; it is roughly ten hours a week of speaking, partner meetings and follow-up, which is what actually produces cases in year one.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Before you spend anything</div>
+    <h2>Constraints that are not optional</h2>
+  </div>
+  <div class="col">
+    <ul class="prose">
+      <li><b>Advertising review.</b> Carriers, IMOs and broker-dealers generally require pre-approval of marketing material. The website and every seminar deck fall under this. Approval first, spend second.</li>
+      <li><b>Licensing.</b> You can only solicit where you hold a licence. The site says "nationwide" &mdash; make sure that is true, or change it.</li>
+      <li><b>Senior-focused seminars are specifically regulated.</b> Rules on senior designations, "educational" event framing, meal events and disclosure apply to exactly the pre-retiree seminars that work best. Know them before you book a room.</li>
+      <li><b>Anti-rebating and referral compensation.</b> Georgia restricts what you can give to induce a purchase or pay for a referral. Structure partner relationships accordingly.</li>
+      <li><b>Do-not-call, CAN-SPAM and community group etiquette.</b> Particularly relevant for the WhatsApp and Facebook community channels that work well in the global families segment &mdash; permission first, always.</li>
+      <li><b>This document is market research, not legal, tax or compliance advice.</b> The estimates are for prioritising your effort. Verify anything you are about to spend real money against.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Sources</div>
+    <h2>Where the published figures came from</h2>
+  </div>
+  <div class="col srcs">
+    <p>Population, income distribution, immigrant population, business and Fortune 500 counts are drawn from the sources below. Cohort-level estimates are my own derivations from these figures and are labelled with confidence throughout.</p>
+    <p style="margin-top:14px;">
+      <a href="https://usafacts.org/answers/how-many-people-live-in-the-us/metro-area/atlanta-ga/">USAFacts &mdash; Atlanta metro population</a> &middot;
+      <a href="https://www.neilsberg.com/insights/topic/atlanta-metro-area/">Neilsberg &mdash; Atlanta metro household income distribution (ACS 2020&ndash;2024)</a> &middot;
+      <a href="https://www.axios.com/local/atlanta/2025/03/18/census-atlanta-immigration-population-boom">Axios Atlanta &mdash; immigration and metro growth</a> &middot;
+      <a href="https://www.welcomingatlanta.com/by-the-numbers">Welcoming Atlanta &mdash; foreign-born population by the numbers</a> &middot;
+      <a href="https://metroatlantachamber.com/wp-content/uploads/2025/03/2025-Top-Employers-Survey.pdf">Metro Atlanta Chamber &mdash; 2025 Top Employers Survey</a> &middot;
+      <a href="https://georgia.org/regions/metro-atlanta-georgia">Georgia.org &mdash; metro Atlanta business base</a> &middot;
+      <a href="https://healthcareworkforce.georgia.gov/data-publications/physician-workforce-database/report-information">Georgia Board of Health Care Workforce &mdash; physician workforce database</a> &middot;
+      <a href="https://www.gfb.org/news/ag-news/post/2022-census-of-agriculture-the-numbers-are-in">Georgia Farm Bureau &mdash; 2022 Census of Agriculture</a> &middot;
+      <a href="https://www.gscpa.org/">Georgia Society of CPAs</a> &middot;
+      <a href="https://www.gabar.org/">State Bar of Georgia</a>
+    </p>
+  </div>
+</section>
+
+</div>

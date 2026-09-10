@@ -13,6 +13,7 @@ import { cohorts, bySlug } from './data-cohorts.mjs';
 import { productIntro, productCategories } from './data-products.mjs';
 import { strategyIntro, strategyCategories } from './data-strategies.mjs';
 import { head, header, footer, leadForm, esc } from './layout.mjs';
+import { FORM_ENDPOINT, ORIGIN } from './config.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const write = (name, html) => {
@@ -33,13 +34,6 @@ const blurb = (s, min = 95) => {
   return out.trim();
 };
 const pad2 = (n) => String(n + 1).padStart(2, '0');
-
-const DEFAULT_TOPICS = [
-  "Protecting my family's income",
-  'Retirement & cash-value strategies',
-  'Business or estate planning',
-  "Not sure yet — I'd like guidance",
-];
 
 const SCENARIO_DISCLAIMER =
   'These are hypothetical examples for illustration only, not guarantees, projections, or recommendations for any specific policy or person. Dollar figures are round numbers chosen to make a point, not quotes. Actual outcomes depend on the policy you choose, your health and underwriting, how the policy is funded and structured, and current tax law, which can change. Tax and legal strategies described here require coordination with your own attorney and CPA. We will walk through real numbers for your situation on your consultation call.';
@@ -110,11 +104,7 @@ ${header({ current: 'index.html' })}
       </div>
     </div>
 
-${leadForm({
-  heading: 'Get your free plan check',
-  note: "Tell us a little about your situation. We'll follow up to schedule your 20-minute call — usually within one business day.",
-  topics: DEFAULT_TOPICS,
-})}
+${leadForm({ slug: '', audienceLabel: 'Home' })}
   </div>
 </section>
 
@@ -645,12 +635,7 @@ ${c.heroBullets.map((b) => `        <li>${esc(b)}</li>`).join('\n')}
         <strong>${esc(c.audienceNote.title)}</strong>
         ${esc(c.audienceNote.body)}
       </div>
-${leadForm({
-  heading: 'Get your free plan check',
-  note: "Tell us a little about your situation. We'll follow up to schedule your 20-minute call — usually within one business day.",
-  topics: DEFAULT_TOPICS,
-  hiddenContext: c.navLabel,
-})}
+${leadForm({ slug: c.slug, audienceLabel: c.navLabel })}
     </div>
   </div>
 </section>
@@ -790,8 +775,6 @@ ${footer({ ctaHref: '#book' })}`;
    ========================================================================== */
 
 function buildSitemap(pages) {
-  // Replace with your real domain before publishing.
-  const ORIGIN = 'https://www.example.com';
   const today = new Date().toISOString().slice(0, 10);
   const urls = pages
     .map(
@@ -806,7 +789,10 @@ function buildSitemap(pages) {
 ${urls}
 </urlset>`
   );
-  write('robots.txt', `User-agent: *\nAllow: /\n\nSitemap: ${ORIGIN}/sitemap.xml`);
+  write(
+    'robots.txt',
+    `User-agent: *\nAllow: /\n\n# Internal planning document — not for indexing\nDisallow: /market-plan.html\n\nSitemap: ${ORIGIN}/sitemap.xml`
+  );
 }
 
 /* ========================================================================== */
@@ -815,4 +801,14 @@ const written = [buildHome(), buildHub(), buildProducts(), buildStrategies(), ..
 buildSitemap(written);
 
 console.log(`Built ${written.length} pages + sitemap.xml + robots.txt`);
+if (!FORM_ENDPOINT) {
+  console.warn(
+    '\n  !!  FORM_ENDPOINT is not set in build/config.mjs.\n' +
+      '      Lead forms will show the thank-you message but capture NOTHING.\n' +
+      '      Set it before you send any traffic to this site.\n'
+  );
+}
+if (ORIGIN.includes('example.com')) {
+  console.warn('  !!  ORIGIN is still example.com — sitemap.xml and robots.txt point at a placeholder domain.\n');
+}
 written.forEach((p) => console.log('  ' + p));

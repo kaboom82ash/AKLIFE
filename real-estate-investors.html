@@ -100,43 +100,95 @@
       </div>
     <div class="form-card" id="book">
       <h3>Get your free plan check</h3>
-      <p class="note">Tell us a little about your situation. We'll follow up to schedule your 20-minute call — usually within one business day.</p>
-      <form id="leadForm">
+      <p class="note">Tell us a little about your situation. We'll follow up to schedule your 20-minute call.</p>
+      <ol class="step-dots" aria-hidden="true">
+        <li class="on"></li>
+        <li></li>
+      </ol>
+      <form id="leadForm" method="POST" action="" novalidate>
         <input type="hidden" name="audience" value="Real Estate Investors">
+        <input type="hidden" name="page_slug" value="real-estate-investors">
+        <input type="hidden" name="utm_source" value="">
+        <input type="hidden" name="utm_medium" value="">
+        <input type="hidden" name="utm_campaign" value="">
+        <input type="hidden" name="referrer" value="">
+        <p class="hp" aria-hidden="true"><label>Leave this empty<input name="company_website" tabindex="-1" autocomplete="off"></label></p>
+      <fieldset class="form-step" data-step="0">
+        <legend class="step-legend">What's prompting this?</legend>
+        <div class="field-grid">
         <div class="field">
-          <label for="name">Full name</label>
-          <input type="text" id="name" name="name" required placeholder="Jordan Smith" autocomplete="name">
-        </div>
-        <div class="field">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" required placeholder="jordan@email.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" required placeholder="(555) 555-5555" autocomplete="tel">
-        </div>
-        <div class="field">
-          <label for="state">State</label>
-          <input type="text" id="state" name="state" required placeholder="Georgia" autocomplete="address-level1">
-        </div>
-        <div class="field">
-          <label for="topic">What's mainly on your mind?</label>
-          <select id="topic" name="topic">
+          <label for="f_topic">What's mainly on your mind?</label>
+          <select id="f_topic" name="topic">
+            <option value="">Select…</option>
             <option>Protecting my family's income</option>
             <option>Retirement &amp; cash-value strategies</option>
             <option>Business or estate planning</option>
+            <option>Income protection if I can't work</option>
             <option>Not sure yet — I'd like guidance</option>
           </select>
         </div>
-        <button type="submit" class="submit-btn">Request my free consultation</button>
+        </div>
+
+        <div class="form-nav">
+          <button type="button" class="submit-btn" data-next>Continue &rarr;</button>
+        </div>
+      </fieldset>
+      <fieldset class="form-step" data-step="1" hidden>
+        <legend class="step-legend">How should we reach you?</legend>
+        <p class="step-note">We usually follow up within one business day to find a time.</p>
+        <div class="field-grid">
+        <div class="field">
+          <label for="f_name">Full name <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="f_name" name="name" required placeholder="Jordan Smith" autocomplete="name">
+        </div>
+        <div class="field half">
+          <label for="f_email">Email <span class="req" aria-hidden="true">*</span></label>
+          <input type="email" id="f_email" name="email" required placeholder="jordan@email.com" autocomplete="email">
+        </div>
+        <div class="field half">
+          <label for="f_phone">Phone <span class="req" aria-hidden="true">*</span></label>
+          <input type="tel" id="f_phone" name="phone" required placeholder="(555) 555-5555" autocomplete="tel">
+        </div>
+        <div class="field half">
+          <label for="f_state">State <span class="req" aria-hidden="true">*</span></label>
+          <input type="text" id="f_state" name="state" required placeholder="Georgia" autocomplete="address-level1">
+        </div>
+        <div class="field half">
+          <label for="f_best_time">Best time to call</label>
+          <select id="f_best_time" name="best_time">
+            <option value="">Select…</option>
+            <option>Morning</option>
+            <option>Midday</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+            <option>Any time</option>
+          </select>
+        </div>
+        </div>
+        <div class="consent">
+          <input type="checkbox" id="f_consent" name="consent" required value="yes">
+          <label for="f_consent">I agree to be contacted by [Advisor name] by phone, text or email about
+          insurance products, including at the number above, which may involve automated technology. Consent is not a
+          condition of purchase and message rates may apply. I can opt out at any time.</label>
+        </div>
+
+        <div class="form-nav">
+          <button type="button" class="btn-back" data-back>&larr; Back</button>
+          <button type="submit" class="submit-btn">Request my free consultation</button>
+        </div>
+      </fieldset>
       </form>
-      <div class="success-msg" id="successMsg">
-        Thanks &mdash; that's in. We'll reach out shortly to find a time that works.
+      <div class="success-msg" id="successMsg" role="status">
+        <strong>Thanks &mdash; that's in.</strong>
+        We'll be in touch within one business day to find a time. Nothing is scheduled and nothing is owed until you say so.
         <div style="margin-top:14px;">
-          <a href="strategies.html" style="display:inline-block;background:var(--forest);color:var(--white);padding:11px 18px;border-radius:3px;text-decoration:none;font-size:14px;font-weight:700;">Access your strategy guide &rarr;</a>
+          <a class="success-cta" href="strategies.html">Read the strategy guide while you wait &rarr;</a>
         </div>
       </div>
-      <p class="form-fine">No spam, ever. Your information is only used to prepare for your consultation.</p>
+      <div class="error-msg" id="errorMsg" role="alert">
+        That didn't go through. Please email <a href="mailto:[your@email.com]">[your@email.com]</a> or try again in a moment.
+      </div>
+      <p class="form-fine">No spam, ever. Your information is used only to prepare for your consultation and is never sold.</p>
     </div>
     </div>
   </div>
