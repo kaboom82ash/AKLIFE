@@ -1,0 +1,13 @@
+{
+  "name": "nova-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "assemble": "python3 build/assemble.py",
+    "export": "node build/export.mjs",
+    "build": "python3 build/assemble.py && node build/export.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}
