@@ -238,7 +238,7 @@ function pHome(){
   ${howBlock()}
   <section class="psec alt"><div class="pin"><div class="eyebrow">Who we help</div><h2>Built for businesses where every missed call is a lost job.</h2>
     <div class="agrid">${Object.entries(AUD).map(([k,a])=>`<a class="acard" href="${k}.html"><h3>${a.t}</h3><p>${a.h1}</p><span class="alink">See what we automate →</span></a>`).join("")}</div></div></section>
-  ${trustBlock()}${faqBlock(GEN_FAQ)}${ctaBlock()}</main>${pFooter()}`;
+  ${ctaBlock()}</main>${pFooter()}`;
 }
 function pAudience(k){
   const a=AUD[k];
@@ -252,7 +252,7 @@ function pAudience(k){
   <section class="psec"><div class="pin"><div class="eyebrow">How we'd help</div><h2>The services most ${a.t.toLowerCase()} start with.</h2>${pillarCards(a.pillars)}</div></section>
   ${howBlock()}
   <section class="psec alt"><div class="pin narrow"><div class="callout"><span class="eyebrow">Compliance and trust</span>${a.compliance}</div></div></section>
-  ${trustBlock()}${faqBlock([...a.faq, ...GEN_FAQ.slice(0,3)])}${ctaBlock()}</main>${pFooter()}`;
+  ${ctaBlock()}</main>${pFooter()}`;
 }
 function pPillar(k){
   const p=PILLARS[k];
@@ -291,7 +291,7 @@ function pPillar(k){
   ${extra}
   <section class="psec alt"><div class="pin"><div class="eyebrow">Examples</div><h2>What this looks like in practice.</h2>${serviceCards(p.tasks.map(id=>[id, findTask(id).t.split(";")[0]]))}</div></section>
   ${evidenceBlock(p.ev, "What the research says.")}
-  ${logoWall(null)}${howBlock()}${trustBlock()}${faqBlock(GEN_FAQ)}${ctaBlock()}</main>${pFooter()}`;
+  ${logoWall(null)}${howBlock()}${ctaBlock()}</main>${pFooter()}`;
 }
 function pHow(){
   return `${pHeader("how-we-work")}<main>
@@ -305,7 +305,7 @@ function pHow(){
     <tr><td>Managed</td><td>Monitoring, tuning, Monday note, monthly report, one improvement a month, quarterly review.</td><td>Month-to-month</td></tr>
   </tbody></table></div></div></section>
   <section class="psec"><div class="pin narrow"><div class="eyebrow">Our standards</div><h2>What we won't skip.</h2><ul class="pains check2">${["A two-week baseline before we claim any result.","Every account, number and login in your company's name.","A human fallback path configured and tested before go-live.","Disclosure and consent language approved in writing.","Shadow mode — a person reviews before a customer hears it.","A runbook so you could run it without us for 30 days."].map(x=>`<li>${x}</li>`).join("")}</ul></div></section>
-  ${trustBlock()}${ctaBlock()}</main>${pFooter()}`;
+  ${ctaBlock()}</main>${pFooter()}`;
 }
 function pDiscover(){
   const lens=[["Revenue leaks","Where do customers try to buy and fail?","Phone report, website or store analytics, CRM, booking system","Missed calls, slow lead replies, abandoned carts, no-shows, unfollowed quotes"],["Hours","Where do people copy, chase, or write the same thing repeatedly?","Ask each staff member; the inbox; the task they'd never do again","Re-keying, document chasing, invoice follow-up, inbox triage, quote writing"],["Cash & margin","Where is money slow, wrong, or unknown?","AR aging, bill volume, job costs, the date the books closed","Late invoices, duplicate payments, unpriced jobs, late close, no dashboard"]];
@@ -334,7 +334,7 @@ Your team scores (1–5):   Pain ___   Value ___   Ease ___   We'd actually use 
 Owner of this problem: ____________     Pilot metric: missed-call rate</pre></div><p class="small muted" style="margin-top:10px">The scoring matters more than it looks. When the office manager gives 'invoice chasing' a five on pain and a five on 'we'd use it', adoption is already half done.</p></div></section>
   <section class="psec"><div class="pin narrow"><div class="eyebrow">What you keep</div><h2>Even if you never hire us.</h2><ul class="pains check2">${["The journey map of your own business, drawn with your team","Your numbers in one place — probably for the first time","A scored list of where the money and hours are going","A clear first step, and an honest opinion on whether it's worth taking"].map(x=>`<li>${x}</li>`).join("")}</ul></div></section>
   ${evidenceBlock(["mckGenAI","mckEmail","qbLate","chamber"], "What the research says about where the opportunities are.")}
-  ${trustBlock()}${ctaBlock()}</main>${pFooter()}`;
+  ${ctaBlock()}</main>${pFooter()}`;
 }
 function pAbout(){
   return `${pHeader("about")}<main>
@@ -345,7 +345,7 @@ function pAbout(){
     <div class="card"><h3>How we're paid</h3><p>Fixed setup fees and month-to-month retainers you can cancel with 30 days' notice. No percentage of your spend, no lock-in, no accounts we own.</p></div>
   </div></div></section>
   <section class="psec alt"><div class="pin"><div class="eyebrow">What we do</div><h2>Four services, one standard.</h2>${pillarCards()}</div></section>
-  ${trustBlock()}
+  
   <section class="psec"><div class="pin narrow"><div class="eyebrow">Experience</div><h2>Where the ${SITE.years} years went.</h2><ul class="pains check2">${["Operating and advising owner-led businesses in the trades, healthcare and professional services","Implementing and integrating the platforms our clients run on — field service, practice management, CRM, accounting","Building and managing AI voice, messaging and document automation in production, with the compliance work that goes with it","Turning messy processes into SOPs, dashboards and repeatable systems"].map(x=>`<li>${x}</li>`).join("")}</ul></div></section>
   ${ctaBlock()}</main>${pFooter()}`;
 }

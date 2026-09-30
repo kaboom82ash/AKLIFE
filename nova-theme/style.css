@@ -1,0 +1,12 @@
+/*
+Theme Name: NOVA Automation
+Theme URI: https://github.com/kaboom82ash/AKLIFE
+Author: NOVA
+Description: Marketing site for NOVA — AI automation for small business. Home, four industry pages, four service pages, how-we-work, finding-opportunities, about and contact templates, driven by inc/data.php and the Customizer.
+Version: 1.0.0
+Requires at least: 6.0
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+Text Domain: nova
+*/
+/* Styles are enqueued from assets/site.css (see functions.php). */
